@@ -51,13 +51,6 @@ const userSchema = new Schema(
         required: true,
       },
     ],
-    owner: [
-      {
-        type: Types.ObjectId,
-        ref: "Profile",
-        required: true,
-      },
-    ],
   },
 
   {
