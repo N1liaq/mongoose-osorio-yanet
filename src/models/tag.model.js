@@ -10,7 +10,15 @@ const tagSchema = new Schema(
   },
   {
     versionKey: false,
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
   },
 );
+
+tagSchema.virtual("articles", {
+  ref: "ArticleTag",
+  localField: "_id",
+  foreignField: "tag",
+});
 
 export const TagModel = model("Tag", tagSchema);
