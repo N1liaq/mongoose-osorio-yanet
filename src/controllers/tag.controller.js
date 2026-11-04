@@ -1,11 +1,10 @@
-import { populate } from "dotenv";
 import { TagModel } from "../models/tag.model.js";
 
 export const createTag = async (req, res) => {
   try {
-    const { name } = req.body;
+    const dataValidated = matchedData(req);
 
-    const newTag = await TagModel.create({ name });
+    const newTag = await TagModel.create(dataValidated);
 
     return res.status(201).json(newTag);
   } catch (error) {
@@ -31,7 +30,7 @@ export const getAllTag = async (req, res) => {
 
 export const getTagById = async (req, res) => {
   try {
-    const { id } = req.params;
+    const { id } = matchedData(req);
     const tag = await TagModel.findById(id).populate({
       path: "articles",
       select: "title description author",
@@ -50,8 +49,9 @@ export const getTagById = async (req, res) => {
 
 export const updateTag = async (req, res) => {
   try {
-    const { id } = req.params;
-    const { name } = req.body;
+    const validatedData = matchedData(req);
+
+    const { id, name } = validatedData;
 
     const updatedTag = await TagModel.findByIdAndUpdate(
       id,
@@ -76,7 +76,7 @@ export const updateTag = async (req, res) => {
 
 export const deleteTag = async (req, res) => {
   try {
-    const { id } = req.params;
+    const { id } = matchedData(req);
 
     const tag = await TagModel.findById(id);
 

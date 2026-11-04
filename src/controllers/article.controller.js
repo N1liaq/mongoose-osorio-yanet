@@ -1,16 +1,14 @@
+import { matchedData } from "express-validator";
 import { ArticleModel } from "../models/article.model.js";
 import { UserModel } from "../models/user.model.js";
 
 export const createArticle = async (req, res) => {
   try {
-    const { title, description, author, tags } = req.body;
+    const validatedData = matchedData(req);
 
-    const newArticle = await ArticleModel.create({
-      title,
-      description,
-      author,
-      tags,
-    });
+    const { author } = validatedData;
+
+    const newArticle = await ArticleModel.create(validatedData);
 
     await UserModel.updateMany(
       { _id: { $in: author } },
@@ -40,7 +38,9 @@ export const getAllArticle = async (req, res) => {
 
 export const getArticleById = async (req, res) => {
   try {
-    const { id } = req.params;
+    const validatedData = matchedData(req);
+    const { id } = validatedData;
+
     const Article = await ArticleModel.findById(id).populate([
       { path: "tags", select: "name" },
       { path: "author", select: "username" },
@@ -58,10 +58,13 @@ export const getArticleById = async (req, res) => {
 
 export const updateArticle = async (req, res) => {
   try {
-    const { id } = req.params;
-    const { title, description } = req.body;
+    const validatedData = matchedData(req);
 
-    const updatedArticle = await ArticleModel.findByIdAndUpdate(id).populate([
+    const { id, ...data } = validatedData;
+
+    const updatedArticle = await ArticleModel.findByIdAndUpdate(id, data, {
+      returnDocument: "after",
+    }).populate([
       { path: "tags", select: "name" },
       { path: "author", select: "username" },
     ]);
@@ -79,7 +82,9 @@ export const updateArticle = async (req, res) => {
 
 export const deleteArticle = async (req, res) => {
   try {
-    const { id } = req.params;
+    const validatedData = matchedData(req);
+
+    const { id } = validatedData;
 
     const Article = await ArticleModel.findById(id);
 
