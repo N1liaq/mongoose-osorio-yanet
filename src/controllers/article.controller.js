@@ -1,6 +1,7 @@
 import { matchedData } from "express-validator";
 import { ArticleModel } from "../models/article.model.js";
 import { UserModel } from "../models/user.model.js";
+import { TagModel } from "../models/tag.model.js";
 
 export const createArticle = async (req, res) => {
   try {
@@ -86,13 +87,23 @@ export const deleteArticle = async (req, res) => {
 
     const { id } = validatedData;
 
-    const Article = await ArticleModel.findById(id);
+    const article = await ArticleModel.findById(id);
 
-    if (!Article) {
+    if (!article) {
       return res.status(400).json({
         msg: "Article no encontrado.",
       });
     }
+
+    await UserModel.updateMany(
+      { _id: { $in: article.author } },
+      { $pull: { articles: id } },
+    );
+
+    await TagModel.updateMany(
+      { _id: { $in: article.tags } },
+      { $pull: { articles: id } },
+    );
 
     await ArticleModel.deleteOne({ _id: id });
     res.status(200).json({ msg: "Article eliminado correctamente." });
