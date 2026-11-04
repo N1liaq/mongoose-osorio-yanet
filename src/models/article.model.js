@@ -10,13 +10,11 @@ const articleSchema = new Schema(
       type: String,
       required: true,
     },
-    author: [
-      {
-        type: Types.ObjectId,
-        ref: "User",
-        required: true,
-      },
-    ],
+    author: {
+      type: Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
     tags: [
       {
         type: Types.ObjectId,

@@ -44,21 +44,23 @@ const userSchema = new Schema(
       ref: "Profile",
       required: true,
     },
-    articles: [
-      {
-        type: Types.ObjectId,
-        ref: "Article",
-        required: true,
-      },
-    ],
+
     isDeleted: { type: Boolean, default: false },
     deletedAt: { type: Date, default: null },
   },
 
   {
     versionKey: false,
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
   },
 );
+
+userSchema.virtual("articles", {
+  ref: "Article", // Modelo donde buscar
+  localField: "_id", // _id del usuario
+  foreignField: "author", // Campo en Article que hace referencia al usuario
+});
 
 export const UserModel = model("User", userSchema);
 3;

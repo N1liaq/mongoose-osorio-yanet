@@ -20,13 +20,12 @@ const profileSchema = new Schema(
       type: Date,
       default: Date.now,
     },
-    user: [
-      {
-        type: Types.ObjectId,
-        ref: "User",
-        required: true,
-      },
-    ],
+    user: {
+      type: Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+
     isDeleted: { type: Boolean, default: false },
     deletedAt: { type: Date, default: null },
   },
