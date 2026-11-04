@@ -13,11 +13,13 @@ import {
   updateArticleValidation,
 } from "../middlewares/validations/article.validation.js";
 import { validate } from "../middlewares/validate.js";
+import { authMiddleware } from "../middlewares/auth.middleware.js";
 
 export const articleRouter = Router();
 
 articleRouter.post(
   "/articles",
+  authMiddleware,
   userMiddleware,
   createArticleValidation,
   validate,
@@ -26,6 +28,7 @@ articleRouter.post(
 articleRouter.get("/articles", userMiddleware, validate, getAllArticle);
 articleRouter.get(
   "/articles/:id",
+  authMiddleware,
   userMiddleware,
   paramIDArticleValidation,
   validate,
@@ -33,6 +36,7 @@ articleRouter.get(
 );
 articleRouter.put(
   "/articles/:id",
+  authMiddleware,
   userMiddleware,
   updateArticleValidation,
   validate,
@@ -40,6 +44,7 @@ articleRouter.put(
 );
 articleRouter.delete(
   "/articles/:id",
+  authMiddleware,
   userMiddleware,
   paramIDArticleValidation,
   validate,

@@ -4,7 +4,7 @@ import { UserModel } from "../models/user.model.js";
 
 export const getAllUsers = async (req, res) => {
   try {
-    const users = await UserModel.find()
+    const users = await UserModel.find({ isDeleted: false })
       .select("-password")
       .populate(["profile", "articles"]);
 
@@ -21,7 +21,7 @@ export const getUserById = async (req, res) => {
   try {
     const { id } = matchedData(req);
 
-    const user = await UserModel.findById(id)
+    const user = await UserModel.findById(id, { isDeleted: false })
       .select("-password")
       .populate(["profile", "articles"]);
 
@@ -65,10 +65,26 @@ export const deleteUser = async (req, res) => {
       return res.status(404).json({ msg: "Usuario no encontrado." });
     }
 
-    await ProfileModel.deleteOne({ _id: user.profile });
-    await UserModel.deleteOne({ _id: id });
+    const now = new Date();
 
-    return res.status(200).json({ msg: "Usuario y perfil eliminados." });
+    await ProfileModel.updateOne(
+      { _id: user.profile },
+      {
+        isDeleted: true,
+        deletedAt: now,
+      },
+    );
+    await UserModel.updateOne(
+      { _id: id },
+      {
+        isDeleted: true,
+        deletedAt: now,
+      },
+    );
+
+    return res
+      .status(200)
+      .json({ msg: "Usuario y perfil desactivados correctamente." });
 
     // const deleteUser = await UserModel.deleteOne({ _id: id });
 

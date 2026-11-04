@@ -55,7 +55,11 @@ export const createArticleValidation = [
 ];
 
 export const updateArticleValidation = [
-  ...paramIDArticleValidation,
+  param("id")
+    .notEmpty()
+    .withMessage("El ID del article no debe estar vacío.")
+    .isMongoId()
+    .withMessage("El ID debe ser un MongoID válido."),
 
   body("title")
     .optional()

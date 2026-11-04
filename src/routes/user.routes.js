@@ -11,12 +11,20 @@ import {
   paramIDUserValidation,
   updateUserValidation,
 } from "../middlewares/validations/user.validation.js";
+import { authMiddleware } from "../middlewares/auth.middleware.js";
 
 export const userRouter = Router();
 
-userRouter.get("/users", adminMiddleware, validate, getAllUsers);
+userRouter.get(
+  "/users",
+  authMiddleware,
+  adminMiddleware,
+  validate,
+  getAllUsers,
+);
 userRouter.get(
   "/users/:id",
+  authMiddleware,
   adminMiddleware,
   paramIDUserValidation,
   validate,
@@ -24,6 +32,7 @@ userRouter.get(
 );
 userRouter.put(
   "/users/:id",
+  authMiddleware,
   adminMiddleware,
   updateUserValidation,
   validate,
@@ -31,6 +40,7 @@ userRouter.put(
 );
 userRouter.delete(
   "/users/:id",
+  authMiddleware,
   adminMiddleware,
   paramIDUserValidation,
   validate,

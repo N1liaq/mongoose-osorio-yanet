@@ -8,8 +8,6 @@ const tagSchema = new Schema(
       unique: true,
     },
     articles: [{ type: Schema.Types.ObjectId, ref: "Article" }],
-    isDeleted: { type: Boolean, default: false },
-    deletedAt: { type: Date, default: null },
   },
   {
     versionKey: false,

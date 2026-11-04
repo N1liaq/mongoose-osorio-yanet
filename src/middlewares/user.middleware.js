@@ -4,7 +4,7 @@ import { ArticleModel } from "../models/article.model.js";
 export const userMiddleware = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const { id: userId, role } = req.user;
+    const { user: userId, role } = req.user;
 
     if (role === "admin") return next();
 
@@ -17,7 +17,7 @@ export const userMiddleware = async (req, res, next) => {
       return res.status(404).json({ message: "Artículo no encontrado" });
     }
 
-    if (!article.author.includes(userId)) {
+    if (!article.author.some((a) => a.equals(userId))) {
       return res.status(403).json({ message: "Acceso denegado." });
     }
 
