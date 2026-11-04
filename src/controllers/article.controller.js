@@ -3,12 +3,13 @@ import { UserModel } from "../models/user.model.js";
 
 export const createArticle = async (req, res) => {
   try {
-    const { title, description, author } = req.body;
+    const { title, description, author, tags } = req.body;
 
     const newArticle = await ArticleModel.create({
       title,
       description,
       author,
+      tags,
     });
 
     await UserModel.updateMany(
@@ -26,7 +27,7 @@ export const createArticle = async (req, res) => {
 export const getAllArticle = async (req, res) => {
   try {
     const Articles = await ArticleModel.find().populate([
-      { path: "tags", populate: { path: "tag", select: "name" } },
+      { path: "tags", select: "name" },
       { path: "author", select: "username" },
     ]);
 
@@ -41,10 +42,7 @@ export const getArticleById = async (req, res) => {
   try {
     const { id } = req.params;
     const Article = await ArticleModel.findById(id).populate([
-      {
-        path: "tags",
-        populate: { path: "tag", select: "name" },
-      },
+      { path: "tags", select: "name" },
       { path: "author", select: "username" },
     ]);
 
@@ -64,10 +62,7 @@ export const updateArticle = async (req, res) => {
     const { title, description } = req.body;
 
     const updatedArticle = await ArticleModel.findByIdAndUpdate(id).populate([
-      {
-        path: "tags",
-        populate: { path: "tag", select: "name" },
-      },
+      { path: "tags", select: "name" },
       { path: "author", select: "username" },
     ]);
 

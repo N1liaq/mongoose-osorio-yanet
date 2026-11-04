@@ -7,18 +7,11 @@ const tagSchema = new Schema(
       required: true,
       unique: true,
     },
+    articles: [{ type: Schema.Types.ObjectId, ref: "Article" }],
   },
   {
     versionKey: false,
-    toJSON: { virtuals: true },
-    toObject: { virtuals: true },
   },
 );
-
-tagSchema.virtual("articles", {
-  ref: "ArticleTag",
-  localField: "_id",
-  foreignField: "tag",
-});
 
 export const TagModel = model("Tag", tagSchema);

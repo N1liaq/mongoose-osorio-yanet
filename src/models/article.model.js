@@ -17,18 +17,17 @@ const articleSchema = new Schema(
         required: true,
       },
     ],
+    tags: [
+      {
+        type: Types.ObjectId,
+        ref: "Tag",
+      },
+    ],
   },
   {
     timestamps: true,
     versionKey: false,
-    toJSON: { virtuals: true },
-    toObject: { virtuals: true },
   },
 );
 
-articleSchema.virtual("tags", {
-  ref: "ArticleTag",
-  localField: "_id",
-  foreignField: "article",
-});
 export const ArticleModel = model("Article", articleSchema);

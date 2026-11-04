@@ -18,11 +18,8 @@ export const getAllTag = async (req, res) => {
   try {
     const tags = await TagModel.find().populate({
       path: "articles",
-      populate: {
-        path: "article",
-        select: "title description author",
-        populate: { path: "author", select: "username" },
-      },
+      select: "title description author",
+      populate: { path: "author", select: "username" },
     });
 
     return res.status(200).json({ data: tags });
@@ -37,11 +34,8 @@ export const getTagById = async (req, res) => {
     const { id } = req.params;
     const tag = await TagModel.findById(id).populate({
       path: "articles",
-      populate: {
-        path: "article",
-        select: "title description author",
-        populate: { path: "author", select: "username" },
-      },
+      select: "title description author",
+      populate: { path: "author", select: "username" },
     });
 
     if (!tag) {
@@ -65,11 +59,8 @@ export const updateTag = async (req, res) => {
       { returnDocument: "after" },
     ).populate({
       path: "articles",
-      populate: {
-        path: "article",
-        select: "title description author",
-        populate: { path: "author", select: "username" },
-      },
+      select: "title description author",
+      populate: { path: "author", select: "username" },
     });
 
     if (!updatedTag) {
