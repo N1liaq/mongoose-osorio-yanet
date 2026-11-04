@@ -23,9 +23,12 @@ const articleSchema = new Schema(
         ref: "Tag",
       },
     ],
+    isDeleted: { type: Boolean, default: false },
+    deletedAt: { type: Date, default: null },
   },
   {
     timestamps: true,
+
     versionKey: false,
   },
 );
